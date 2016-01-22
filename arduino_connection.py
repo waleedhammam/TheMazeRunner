@@ -18,16 +18,14 @@ class arduino_connection(object):
 	' clean_path is a function that get rid off some staff we don't need
 	' and returns a clean path ready to send to arduino
 	'''
-	def clean_path(self, old_path):
+	def clean_path(self, old_path):			
 		# convert the list to string
 	    path_to_ard = str(self.path)
 	    # iterate over the list to eliminate brackets and parantesess
-	    for i in ["[","]","("," "] :  
+	    for i in ["[","]","(",")"," "] :
 	        path_to_ard = path_to_ard.replace(i,"")
-	    path_to_ard = path_to_ard.replace("),", ":")
-	    path_to_ard = path_to_ard.replace(")", "")
-	    # concatenate a $ symbol just to let arduino know the end of receive
-	    path_to_ard = path_to_ard + "$"
+	    # put a * symbol and concatenate a $ symbol just to let arduino know the start and  end of receive msg to avoid rubish 
+	    path_to_ard = "*" + path_to_ard + "$"
 	    return path_to_ard
 	'''
 	' connect is a function that sends the data to arduino 
