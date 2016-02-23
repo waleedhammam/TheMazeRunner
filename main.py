@@ -8,10 +8,11 @@ def main():
     init = [28, 28]
     goal = [53, 4]
     cost = 5
-
-    ratio = 3
-    #maze(self, grid, init, goal, cost, robot_ratio)
-
+    
+    # ratio = robot_diameter / ( 2* maze_cell_long)
+    # it's initially = 1 but you can edit it according your robot design
+    ratio = 1
+    #save.p is the maze pickle file , replace it with your maze file (it should be in the same format)
     simple_grid = cPickle.load(open('save.p', 'rb'))
 
     maze_obj = maze(simple_grid, init, goal,cost,ratio)
@@ -42,7 +43,6 @@ def main():
     '''
     ard.connect()
     '''
-    #print path
 
 
 if __name__ == "__main__":
