@@ -8,6 +8,7 @@ def main():
     init = [28, 28]
     goal = [53, 4]
     cost = 5
+    speed = 115200
     
     # ratio = robot_diameter / ( 2* maze_cell_long)
     # it's initially = 1 but you can edit it according your robot design
@@ -35,7 +36,7 @@ def main():
     print str(path1) + "  len = " + str(len(path1))
     port = "/dev/ttyACM1"
 
-    ard = arduino_connection(path1, port)
+    ard = arduino_connection(path1, port, speed)
     new_path = ard.shut_your_mouth()
     print str(new_path) + "  len = " + str(len(new_path))
 
