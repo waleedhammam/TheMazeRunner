@@ -28,21 +28,21 @@ class arduino_connection(object):
 	' so arduino can handle them                      '
 	'''''''''''''''''''''''''''''''''''''''''''''''''''
 	def shut_your_mouth(self):
-            dirty_path = self.path
-	    clean_path = []
-	    cur_node = dirty_path[0]
-	    clean_path.append(cur_node)
-	    for i in range (1, len(dirty_path) ):
-	        next_node = dirty_path[i]
-	        if next_node[0] != cur_node [0] :
-	            prev_node = dirty_path[i-1]
-	            #print prev_node, "next", next_node
-	            if prev_node not in clean_path : clean_path.append(prev_node)
-	            if next_node not in clean_path : clean_path.append(next_node)
-	            cur_node = next_node
-	    if dirty_path[-1]    not in clean_path : clean_path.append(dirty_path[-1])
-	    #new_clean_path = list(set(clean_path))
-	    return clean_path
+		dirty_path = self.path
+		clean_path = []
+		cur_node = dirty_path[0]
+		clean_path.append(cur_node)
+		for i in range (1, len(dirty_path) ):
+			next_node = dirty_path[i]
+			if next_node[0] != cur_node [0] :
+				prev_node = dirty_path[i-1]
+				#print prev_node, "next", next_node
+				if prev_node not in clean_path : clean_path.append(prev_node)
+				if next_node not in clean_path : clean_path.append(next_node)
+				cur_node = next_node
+				if dirty_path[-1]    not in clean_path : clean_path.append(dirty_path[-1])
+				#new_clean_path = list(set(clean_path))
+		return clean_path
 
 	''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 	' clean_path function takes the reduced path and       '
@@ -51,15 +51,15 @@ class arduino_connection(object):
 	' return value is the final path and ready to be sent  '
 	''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 	def clean_path(self):
-	    old_path = self.shut_your_mouth()
+	    path = self.shut_your_mouth()
 		# convert the list to string
-	    path_to_ard = str(self.path)
+	    path_to_ard = str(path)
 	    # iterate over the list to eliminate brackets and parantesess
 	    for i in ["[","]","("," "] :
 	        path_to_ard = path_to_ard.replace(i,"")
 	    path_to_ard = path_to_ard.replace("),", ",")
 	    path_to_ard = path_to_ard.replace(")", "")
-	    # concatenate a $ symbol just to let arduino know the end of receive
+	    # adding a * and $ symbol to let arduino know the start and end of receive
 	    path_to_ard = "*" + path_to_ard + "$"
 	    return path_to_ard
 
@@ -68,15 +68,22 @@ class arduino_connection(object):
 	' via serial ports and send the final path           '
 	''''''''''''''''''''''''''''''''''''''''''''''''''''''
 	def connect(self):
+		# get the final - clean path
+		final_path = self.clean_path()
+		# Printing final path
+		print "Final Path is: "
+		print final_path
+		# Trying to make connection to arduino
+		print "Connecting ..."
 		try:
 			# take an object from serial library
 			arduino = serial.Serial(self.port, self.speed)
 			# delay to give the serial some time to initalize
 			time.sleep = 2
-			# get the final - clean path
-			final_path = self.clean_path(self.path)
 			# write the data
 			arduino.write(final_path)
+			# Connection completed
+			print "Success, Data sent"
 			# close
 			arduino.close()
 		except serial.SerialException:

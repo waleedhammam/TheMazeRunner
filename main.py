@@ -1,50 +1,55 @@
+''''''''''''''''''''''''''''''''''''''''''
+' Main function where the program starts '
+''''''''''''''''''''''''''''''''''''''''''
+
+# Importing Required Libraries and classes
 import Tkinter as tk
 import cPickle, copy
 import serial, time
 from maze import maze
 from arduino_connection import arduino_connection
 
+# Main
 def main():
+    # initial Point
     init = [28, 28]
+    # Final point
     goal = [53, 4]
-    cost = 5
+    # Move Cost
+    cost = 1
+    # Connection Speed
     speed = 115200
-    
-    # ratio = robot_diameter / ( 2* maze_cell_long)
-    # it's initially = 1 but you can edit it according your robot design
-    ratio = 1
-    #save.p is the maze pickle file , replace it with your maze file (it should be in the same format)
-    simple_grid = cPickle.load(open('save.p', 'rb'))
+    # Barriers ratio to path width
+    ratio = 1    
+    # save.p is the maze pickle file, and generates the maze
+    grid = cPickle.load(open('save.p', 'rb'))
+    # Serial Port
+    port = "/dev/ttyACM1"
+    # Taking an object from maze class
+    maze_obj = maze(grid, init, goal,cost,ratio)
 
-    maze_obj = maze(simple_grid, init, goal,cost,ratio)
-
-    grid_row_no = len(simple_grid)
-    grid_col_no = len(simple_grid[0])
+    '''''''''''''''''''''''''''''''''''''''''
+    ' Building the final maze with Barriers '              
+    '''''''''''''''''''''''''''''''''''''''''
+    grid_row_no,  grid_col_no = len(grid), len(grid[0])
     total_barrier = set()
-
     for row in range(grid_row_no) :
         for col in range(grid_col_no):
-            cur_node = simple_grid[row][col]
+            cur_node = grid[row][col]
             if  cur_node == 1 :
                 node_barrier = maze_obj.update_b(row, col)
                 total_barrier.update(node_barrier) 
-
     maze_obj.set_grid(total_barrier)
 
-    path1 = maze_obj.search()
-    #print str(path) + "  len = " + str(len(path))
-    print str(path1) + "  len = " + str(len(path1))
-    port = "/dev/ttyACM1"
+    # Performing search
+    path = maze_obj.search()
+    # Taking an object from arduino_connection class
+    ard_obj = arduino_connection(path, port, speed)
+    # Sending Data to arduino
+    ard_obj.connect()
 
-    ard = arduino_connection(path1, port, speed)
-    new_path = ard.shut_your_mouth()
-    print str(new_path) + "  len = " + str(len(new_path))
-
-
-    '''
-    ard.connect()
-    '''
-
-
+'''''''''''''''''
+' Starting main '
+'''''''''''''''''
 if __name__ == "__main__":
     main()

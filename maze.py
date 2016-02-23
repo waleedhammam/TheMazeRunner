@@ -161,3 +161,8 @@ class maze(object):
                                 open.append([f2, g2, (x2, y2), path2]) 
                                 # close the visited point    
                                 self.closed[x2][y2] = 1
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' End of class , Don't forget to import it in your application      '
+' you may use from maze import maze                                 '
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
