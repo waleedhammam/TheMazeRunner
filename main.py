@@ -19,7 +19,7 @@ def main():
     cost = 1
     # Connection Speed
     speed = 115200
-    # Barriers ratio to path width
+    # Barriers ratio to path width = robot_diameter / (2 * maze cell long)
     ratio = 1    
     # save.p is the maze pickle file, and generates the maze
     grid = cPickle.load(open('save.p', 'rb'))
