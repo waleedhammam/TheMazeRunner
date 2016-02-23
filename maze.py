@@ -1,18 +1,17 @@
-'''
-' Hello, This class is a maze solver using a- star algorithm and a heuristic function 
-' to solve a very difficult maze :D, 
-' to use this class just take an object in your main program file
-' this class is open source, feel free to make your commits and send us your feedback.
-'''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Class Maze is the heart of the program. it takes the start point,   ' 
+' final point, grid, and cost and returns the robot's path.           '
+' Search is made using a - star algorithm with a simple heuristic     '
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 class maze(object):
-    '''
-    ' __init__ method works as a constructor, takes 5 parameters,
-    ' self -> essential for python
-    ' grid -> the maze you want to solve
-    ' init -> the start point as a list
-    ' goal -> the final point as a list
-    ' cost -> the move cost
-    '''
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    ' The class consructor takes 5 parameters,                       '
+    ' grid -> the maze you want to solve                             '
+    ' init -> the start point as a list                              '
+    ' goal -> the final point as a list                              '
+    ' cost -> the move cost                                          '
+    ' robot_ratio -> to make illusionistc barrier to avoid collision '
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     def __init__(self, grid, init, goal, cost, robot_ratio):
         self.grid = grid
         self.init = init
@@ -31,21 +30,12 @@ class maze(object):
         self.closed = [ [0 for row in range(self.cols_no)] for col in range(self.rows_no )]
         # initializing first item(start point with 1)
         self.closed[init[0]][init[1]] = 1
-    '''
-    ' heuristic function is a helper function makes an indicator for reaching the goal
-    ' logically it drives the distance from current point to gaol discarding obstacles
-    ' function heuristic takes one parameter node as a list, consisits of x and y co-ord
-    ' and return the sum of'em (the diaognal distance)
-    '''
-    
 
-    def update_b(self, row, col) :
-
-               
-                
-        '''
-        update the barrier points according to the robot dimensions
-        '''
+    '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    ' update_b function updates the barriers of                     '
+    ' the grid to avoid collision                                   '
+    '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    def update_b(self, row, col) :                
         barrier = set()
         cur_node = (row, col)
         ratio = self.ratio
@@ -72,11 +62,11 @@ class maze(object):
             barrier.update(set(new_nodes))
             return barrier
 
-
+    '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    ' make_new_robotic_grid function generates a new suitble grid '
+    ' for the robot dimensions                                    '
+    '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     def make_new_robotic_grid(self, brarrier):
-        '''
-        makes new grid suitable for the robot dimensions 
-        '''
         old_grid = self.grid
         row_no = self.rows_no
         col_no = self.cols_no
@@ -92,21 +82,27 @@ class maze(object):
                     new_grid[row].append(0)
         return new_grid
     
+    ''''''''''''''''''''''''''
+    ' Getting the grid ready '                                   
+    ''''''''''''''''''''''''''
     def set_grid(self, barriers):
-        '''sets the grid '''
         self.final_grid = self.make_new_robotic_grid(barriers)
 
+    '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    ' heuristic function is a helper function produces an indicator '
+    ' for the goal without barriers by calcualting the distance     '                       
+    '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     def heuristic(self, node):
         # x- distance from current point to goal
         dx = abs(node[0] - self.goal[0])
         # y- distance from current point to goal
         dy = abs(node[1] - self.goal[1])
         return dx + dy
-    '''
-    ' search function is an a* algorithm, it solves the maze,
-    ' if there's is an optimal way it returns it
-    ' otherwise returns fail
-    '''
+    '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    ' search function is an a* algorithm, it solves the maze, '
+    ' if there's is an optimal way it returns it              '
+    ' otherwise returns fail                                  '
+    '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     def search(self):
         # starting position
         x, y = self.init[0], self.init[1]
