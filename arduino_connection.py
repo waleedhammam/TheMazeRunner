@@ -1,25 +1,32 @@
-'''
-' connection class takes an object from the serial library
-' and send some data to serial port which in our case an arduino nano
-' clean_path is a function we made to send the path in a suitable form
-' connect is a function that sends the data
-'''
-# import pyserial library, and time library will be used for sleep
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' arduino_connection Class is the link between Python and Arduino.     '
+' shut_your_mouth and clean_path function converts the path into       '
+' another form that is easy to deal with on arduino                    '
+' Connect function takes that path and sends it via serial port to     '
+' the arduino device                                                   '
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+# importing pyserial library, and time library will be used for sleep
 import serial, time
+
 class arduino_connection(object):
-	'''
-	' Our beatiful constructor takes the path and port
-	'''
-	def __init__(self, path, port):
+	'''''''''''''''''''''''''''''''''''''''''''''''''''
+	' The main constructor that takes 3 parameters    '
+	' path -> Path generated from search              '
+	' port -> Serial Port position                    '
+	' speed -> Serial's transfer speed                '
+	'''''''''''''''''''''''''''''''''''''''''''''''''''
+	def __init__(self, path, port, speed):
 		self.path = path
 		self.port = port
-		self.speed = 115200
-	'''
-	' clean_path is a function that get rid off some staff we don't need
-	' and returns a clean path ready to send to arduino
-	'''
+		self.speed = speed
 	
-
+	'''''''''''''''''''''''''''''''''''''''''''''''''''
+	' shut_your_mouth function Optomizes the robot's  '
+	' path by reducing the points in x-dir            '
+	' e.x : it reduces points from 274 to 74          '
+	' so arduino can handle them                      '
+	'''''''''''''''''''''''''''''''''''''''''''''''''''
 	def shut_your_mouth(self):
             dirty_path = self.path
 	    clean_path = []
@@ -37,9 +44,13 @@ class arduino_connection(object):
 	    #new_clean_path = list(set(clean_path))
 	    return clean_path
 
-
+	''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+	' clean_path function takes the reduced path and       '
+	' eliminates the brackets and parantesess to make      '
+	' it easy for arduino to read points                   '
+	' return value is the final path and ready to be sent  '
+	''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 	def clean_path(self):
-        
 	    old_path = self.shut_your_mouth()
 		# convert the list to string
 	    path_to_ard = str(self.path)
@@ -49,14 +60,15 @@ class arduino_connection(object):
 	    path_to_ard = path_to_ard.replace("),", ",")
 	    path_to_ard = path_to_ard.replace(")", "")
 	    # concatenate a $ symbol just to let arduino know the end of receive
-	    path_to_ard = path_to_ard + "$"
+	    path_to_ard = "*" + path_to_ard + "$"
 	    return path_to_ard
-	'''
-	' connect is a function that sends the data to arduino
-	'''
+
+	''''''''''''''''''''''''''''''''''''''''''''''''''''''
+	' connect function initiates a connection to arduino '
+	' via serial ports and send the final path           '
+	''''''''''''''''''''''''''''''''''''''''''''''''''''''
 	def connect(self):
 		try:
-
 			# take an object from serial library
 			arduino = serial.Serial(self.port, self.speed)
 			# delay to give the serial some time to initalize
@@ -67,7 +79,11 @@ class arduino_connection(object):
 			arduino.write(final_path)
 			# close
 			arduino.close()
-
 		except serial.SerialException:
 			print "it was an error and now it's an exception :D"
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' End of class , Don't forget to import it in your application      '
+' you may use from arduino_connection import arduino_connection     '
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 		
