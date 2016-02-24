@@ -3,7 +3,6 @@
 ''''''''''''''''''''''''''''''''''''''''''
 
 # Importing Required Libraries and classes
-import Tkinter as tk
 import cPickle, copy
 import serial, time
 from maze import maze
