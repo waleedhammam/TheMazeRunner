@@ -1,14 +1,21 @@
-#TheMazeRunner
-AI Project designed as maze solver that solve any maze and send the points to the goal to a robot
+#The Maze Runner
+AI Class Project that designed to solve any maze and send the path of the goal point to a robot via arduino.
 
-###code design 
-the code is designed to solve complex mazes and send the solution to the robot controller in easy format 
+###Code Design 
+This project consists of 2 classes and a main file.
+First Class (maze) contains functions that solve the maze and produces a suitable form of the robot's path
+Second Class (arduino_connection) is responsible for transimiting the robot's path to an arduino.
+And of course (Main) file connects all these staff together, It's the machine that connects all program's parts together
+to make it work !
 
-###search Algorithm 
-we used A-star Algorithm to get the shortest path
+###Search Algorithm 
+"A-Star" algorithm it's a world wide used algorithm that returns the optimal path to the goal.
+Check: https://en.wikipedia.org/wiki/A*_search_algorithm
 
-###Robot consideration 
-we took into account the robot dimentions and maze cell long to make the robot walk freely without crashing any inner objects or maze borders
+###Code Rules
+The robot's size must not exceed the maze's width.
+The maze should have at least one solution.
 
-###Data communication 
-we used serial communication to send the final path to the robot
+###Software Requirments
+Pyserial library. Download link: https://pypi.python.org/pypi/pyserial/2.7
+Python 2.x .      Download link: https://www.python.org/ftp/python/2.7.11/Python-2.7.11.tar.xz
