@@ -27,6 +27,6 @@ Pyserial library. Download link: https://pypi.python.org/pypi/pyserial/2.7
 Python 2.x .      Download link: https://www.python.org/ftp/python/2.7.11/Python-2.7.11.tar.xz
 
 
-###Supervised By:
+###Supervised By
   Eng: Ahmed El-Helw,  https://github.com/ahmed-elhelow
   
